@@ -1,0 +1,9 @@
+{
+        "orderers": [
+          "orderer1.intelijen.io"
+        ],
+        "peers": [
+          "peer1.militer.intelijen.io"
+        ]
+      },
+		"${CHANNEL_NAME}": ${ISI}

@@ -1,0 +1,6 @@
+communications-monitoring
+signal-analysis
+data-collection
+code-breaking
+electronic-intelligence
+communication-intelligence

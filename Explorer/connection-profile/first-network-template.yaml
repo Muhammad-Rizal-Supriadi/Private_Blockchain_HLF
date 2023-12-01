@@ -1,0 +1,56 @@
+{
+	"name": "first network (ignored)",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
+	"client": {
+		"tlsEnable": true,
+		"caCredential": {
+			"id": "admin",
+			"password": "adminpw"
+		},
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw",
+			"affiliation": "org1.department1"
+		},
+		"enableAuthentication": true,
+		"organization": "MiliterMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"${CHANNEL_NAME}": ${ISI}
+	},
+	"organizations": {
+		"MiliterMSP": {
+			"mspid": "MiliterMSP",
+			"adminPrivateKey": {
+				"path": "/etc/data/peer/militer.intelijen.io/users/Admin@militer.intelijen.io/msp/keystore/priv_sk"
+			},
+			"peers": [
+				"peer1.militer.intelijen.io"
+			],
+			"signedCert": {
+				"path": "/etc/data/peer/militer.intelijen.io/users/Admin@militer.intelijen.io/msp/signcerts/cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer1.militer.intelijen.io": {
+			"tlsCACerts": {
+				"path": "/etc/data/peer/militer.intelijen.io/peers/peer1.militer.intelijen.io/tls/ca.crt"
+			},
+			"url": "grpcs://192.168.1.50:7051",
+			"eventUrl": "grpcs://192.168.1.50:7053",
+			"grpcOptions": {
+				"ssl-target-name-override": "peer1.militer.intelijen.io"
+			}
+		}
+	}
+}

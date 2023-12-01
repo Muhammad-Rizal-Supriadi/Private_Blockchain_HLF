@@ -1,0 +1,60 @@
+{
+    "name": "Militer-Network",
+    "version": "1.1",
+    "client": {
+      "organization": "Militer",
+      "connection": {
+          "timeout": {
+              "peer": {
+                "endorser": "300"
+              },
+              "orderer": "300"
+          }
+      }
+    },
+    "channels": {
+      "${CHANNEL_NAME}": ${ISI}
+    },
+    "organizations": {
+      "Militer": {
+        "mspid": "MiliterMSP",
+        "peers": [
+            "peer1.militer.intelijen.io"
+        ]
+      }
+    },
+    "orderers": {
+      "orderer1.intelijen.io": {
+        "url": "grpcs://${HOSTO}:7050",
+        "grpcOptions": {
+          "ssl-target-name-override": "orderer1.intelijen.io"
+        },
+        "tlsCACerts": {
+            "pem": "${OPEM}"
+        }
+      }
+    },
+    "peers": {
+      "peer1.militer.intelijen.io": {
+        "url": "grpcs://${HOSTP1}:7051",
+        "grpcOptions": {
+          "ssl-target-name-override": "peer1.militer.intelijen.io"
+        },
+        "tlsCACerts": {
+            "pem": "${PEER1PEM}"
+        }
+      }
+    },
+    "certificateAuthorities": {
+        "ca.militer.intelijen.io": {
+            "url": "https://${HOSTP1}:7054",
+            "caName": "ca.militer.intelijen.io",
+            "tlsCACerts": {
+                "pem": "${CAPEM}"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+  }

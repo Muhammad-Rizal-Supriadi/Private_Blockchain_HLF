@@ -1,0 +1,4 @@
+material-monitoring
+technical-analysis
+reverse-engineering
+capability-assessment

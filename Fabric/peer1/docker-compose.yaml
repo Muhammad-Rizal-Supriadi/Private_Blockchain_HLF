@@ -1,0 +1,76 @@
+version: "3.8"
+
+networks:
+      fabric_test:
+
+volumes:
+  data-peer1.militer.intelijen.io:
+
+services:
+  couchdb:
+    container_name: couchdb
+    image: couchdb:3.2.2
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - 0.0.0.0:5984:5984
+    networks:
+      - fabric_test
+
+  peer1.militer.intelijen.io:
+    container_name: peer1.militer.intelijen.io
+    extends:
+      file: base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_LOCALMSPID=MiliterMSP
+      - CORE_PEER_ID=peer1.militer.intelijen.io
+      - CORE_PEER_ADDRESS=${NODE3}:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=${NODE3}:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=peer1_fabric_test
+      # Peer used to bootstrap gossip within organisation
+      - CORE_PEER_GOSSIP_BOOTSTRAP=${NODE2}:7051
+      # Exposed for discovery Service
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=${NODE3}:7051
+      # CouchDB Address
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+    extra_hosts:
+      - "orderer1.intelijen.io:${NODE1}"
+      - "peer2.militer.intelijen.io:${NODE2}"
+    depends_on:
+      - couchdb
+    ports:
+      - 7051:7051
+    volumes:
+      - ./../ca/organizations/peer/militer.intelijen.io/peers/peer1.militer.intelijen.io/msp:/etc/hyperledger/crypto/peer/msp
+      - ./../ca/organizations/peer/militer.intelijen.io/peers/peer1.militer.intelijen.io/tls:/etc/hyperledger/crypto/peer/tls
+      - /var/run/:/host/var/run/
+      - data-peer1.militer.intelijen.io:/var/hyperledger/production
+    networks:
+      - fabric_test
+  
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:2.2.10
+    labels:
+      service: hyperledger-fabric
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - FABRIC_LOGGING_SPEC=INFO
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=DEBUG
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - ./organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./docker/peercfg:/etc/hyperledger/peercfg
+    depends_on:
+      - peer1.militer.intelijen.io
+    networks:
+      - fabric_test

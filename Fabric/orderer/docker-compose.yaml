@@ -1,0 +1,31 @@
+version: "3.8"
+
+networks:
+      fabric_test:
+
+services:
+  orderer1.intelijen.io:
+    container_name: orderer1.intelijen.io
+    extends:
+      file: base.yaml
+      service: orderer-base
+    dns_search: .
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:8443
+    extra_hosts:
+  
+      - "peer1.militer.intelijen.io:192.168.1.19"
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderers
+    command: orderer
+    ports:
+      - 0.0.0.0:7050:7050
+      - 0.0.0.0:8443:8443
+    networks:
+      - fabric_test
+    volumes:
+      - ./../channel/artifacts/profile/genesis.block:/var/hyperledger/orderer/genesis.block
+      - ./../ca/organizations/orderer/orderer.intelijen.io/orderers/orderer1.intelijen.io/msp:/var/hyperledger/orderer/msp
+      - ./../ca/organizations/orderer/orderer.intelijen.io/orderers/orderer1.intelijen.io/tls:/var/hyperledger/orderer/tls

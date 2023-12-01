@@ -1,0 +1,5 @@
+policy-analysis
+threat-assessment
+intelligence-evaluation
+stragetic-planning
+policy-review

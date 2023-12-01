@@ -1,0 +1,17 @@
+{
+			"peers": {
+				"peer1.kpu.zillabc.io": {},
+				"peer2.kpu.zillabc.io": {},
+				"peer3.kpu.zillabc.io": {}
+			},
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "6000",
+						"eventHub": "6000",
+						"eventReg": "6000"
+					}
+				}
+			}
+		},
+		"${CHANNEL_NAME}": ${ISI}
